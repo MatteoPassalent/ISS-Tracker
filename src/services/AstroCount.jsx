@@ -20,7 +20,7 @@ function AstroCount() {
 
     fetchData();
 
-    const intervalId = setInterval(fetchData, 60 * 60 * 1000); // Fetch data every hour
+    const intervalId = setInterval(fetchData, 5000); // Fetch data every 5 seconds
 
     return () => {
       clearInterval(intervalId);

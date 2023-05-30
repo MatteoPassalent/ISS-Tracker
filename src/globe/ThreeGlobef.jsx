@@ -53,8 +53,9 @@ const ThreeGlobef = () => {
 
     // Add camera controls
     const tbControls = new TrackballControls(camera, renderer.domElement);
-    tbControls.minDistance = 101;
-    tbControls.rotateSpeed = 20;
+    tbControls.minDistance = 240;
+    tbControls.maxDistance = 400;
+    tbControls.rotateSpeed = 5;
     tbControls.zoomSpeed = 0.8;
 
     // Animation loop
