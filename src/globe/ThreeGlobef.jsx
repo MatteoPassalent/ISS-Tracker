@@ -8,10 +8,28 @@ const ThreeGlobef = () => {
   const mountRef = useRef(); // Reference to the mount point for the renderer
 
   useEffect(() => {
+
+    const gData = [{
+      lat: 51.77,
+      lng: -160.659,
+      maxR: 6,
+      propagationSpeed: 2,
+      repeatPeriod: 1000
+    }]
+    const colorInterpolator = t => `rgba(255,100,50,${1-t})`
+
     // Create Three.js globe
     const Globe = new ThreeGlobe()
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-      .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png');
+      .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+      .ringsData(gData)
+      .ringColor(() => colorInterpolator)
+      .ringMaxRadius('maxR')
+      .ringPropagationSpeed('propagationSpeed')
+      .ringRepeatPeriod('repeatPeriod');
+
+  
+
 
     // Custom globe material
     const globeMaterial = Globe.globeMaterial();
