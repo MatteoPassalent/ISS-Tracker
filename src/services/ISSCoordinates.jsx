@@ -1,16 +1,21 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
+import PropTypes from 'prop-types';
 
-export default function ISSCoordinates() {
-  const [latitude, setLatitude] = useState(null)
-  const [longitude, setLongitude] = useState(null)
+ISSCoordinates.propTypes = {
+  setLatitude: PropTypes.number.isRequired,
+  setLongitude: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+};
 
+export default function ISSCoordinates(props) {
 
   async function fetchISSPosition() {
     try {
       const response = await fetch('http://api.open-notify.org/iss-now.json');
       const data = await response.json()
-      setLatitude(data.iss_position.latitude)
-      setLongitude(data.iss_position.longitude)
+      props.setLatitude(data.iss_position.latitude)
+      props.setLongitude(data.iss_position.longitude)
     } catch (error) {
       console.error('Error fetching ISS position:', error)
     }
@@ -31,8 +36,8 @@ export default function ISSCoordinates() {
 
   return (
     <div>
-      <p>Latitude: {latitude}</p>
-      <p>Longitude: {longitude}</p>
+      <p>Latitude: {props.latitude}</p>
+      <p>Longitude: {props.longitude}</p>
     </div>
   )
 }

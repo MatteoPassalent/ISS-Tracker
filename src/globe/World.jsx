@@ -1,60 +1,55 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import Globe from 'react-globe.gl';
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import PropTypes from 'prop-types';
 
-// custom globe material
-const globeMaterial = new THREE.MeshPhongMaterial();
-globeMaterial.bumpScale = 10;
-new THREE.TextureLoader().load('//unpkg.com/three-globe/example/img/earth-water.png', texture => {
-  globeMaterial.specularMap = texture;
-  globeMaterial.specular = new THREE.Color('grey');
-  globeMaterial.shininess = 15;
-});
+const N = 1;
+const randomData = [...Array(N).keys()].map(() => ({
+  lat: 31.6241,
+  lng: -74.0238,
+  alt: 408/6371,
+  radius: 3,
+  color: 'red'
+}));
 
-export default function World() {
+World.propTypes = {
+  lat: PropTypes.number.isRequired,
+  lng: PropTypes.number.isRequired
+};
+
+export default function World(props) {
+
   const globeEl = useRef();
-  const tbControlsRef = useRef();
+  const [data, setData] = useState(randomData);
 
   useEffect(() => {
-    const directionalLight = globeEl.current.scene().children.find(
-      obj3d => obj3d.type === 'DirectionalLight'
-    );
-    directionalLight && directionalLight.position.set(1, 1, 1);
+    (function moveSpheres() {
+      setData(prevData => prevData.map(prev => ({
+        ...prev,
+        lat: props.lat,
+        lng: props.lng
+      })));
+      requestAnimationFrame(moveSpheres);
+    })();
+  }, [props.lat, props.lng]);
+  
 
-    // Initialize TrackballControls
-    const tbControls = new TrackballControls(
-      globeEl.current.camera(),
-      globeEl.current.renderer().domElement
-    );
-    tbControlsRef.current = tbControls;
-
-    // Set custom properties
-    tbControls.minDistance = 500;
-    tbControls.rotateSpeed = 5;
-    tbControls.zoomSpeed = 0.8;
-
-    // Animation loop
-    const animate = () => {
-      tbControls.update();
-      requestAnimationFrame(animate);
-    };
-    animate();
-
-    return () => {
-      // Dispose TrackballControls
-      tbControlsRef.current.dispose();
-    };
+  useEffect(() => {
+    globeEl.current.pointOfView({ altitude: 3.5 });
   }, []);
 
-  return (
-    
-    <Globe
-      ref={globeEl}
-      globeMaterial={globeMaterial}
-      globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-      bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-      backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-    />
-  );
+  return <Globe
+    ref={globeEl}
+    globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+    bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+
+    customLayerData={data}
+    customThreeObject={d => new THREE.Mesh(
+      new THREE.SphereGeometry(d.radius),
+      new THREE.MeshLambertMaterial({ color: d.color })
+    )}
+    customThreeObjectUpdate={(obj, d) => {
+      Object.assign(obj.position, globeEl.current.getCoords(d.lat, d.lng, d.alt));
+    }}
+  />;
 }
