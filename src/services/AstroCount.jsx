@@ -1,29 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-function AstroCount() {
-  const [number, setNumber] = useState(null);
-  const [astronauts, setAstronauts] = useState([]);
-  const [crafts, setCrafts] = useState([]);
+export default function AstroCount() {
+  const [number, setNumber] = useState(null)
+  const [astronauts, setAstronauts] = useState([])
+  const [crafts, setCrafts] = useState([])
 
-  useEffect(() => {
-    const fetchData = async () => {
+  async function fetchData() {
       try {
         const response = await fetch('http://api.open-notify.org/astros.json');
-        const data = await response.json();
-        setNumber(data.number);
-        setAstronauts(data.people.map(person => person.name));
-        setCrafts(data.people.map(person => person.craft));
+        const data = await response.json()
+        setNumber(data.number)
+        setAstronauts(data.people.map(person => person.name))
+        setCrafts(data.people.map(person => person.craft))
       } catch (error) {
-        console.error('Error fetching astro data:', error);
+        console.error('Error fetching astro data:', error)
       }
-    };
+    }
 
-    fetchData();
+  useEffect(() => {
 
-    const intervalId = setInterval(fetchData, 5000); // Fetch data every 5 seconds
+    fetchData()
+
+    const intervalId = setInterval(fetchData, 5000) // Fetch data every 5 seconds
 
     return () => {
-      clearInterval(intervalId);
+      clearInterval(intervalId)
     };
   }, []);
 
@@ -38,7 +39,6 @@ function AstroCount() {
         ))}
       </ul>
     </div>
-  );
+  )
 }
 
-export default AstroCount;

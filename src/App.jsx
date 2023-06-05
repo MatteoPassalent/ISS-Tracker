@@ -2,15 +2,15 @@
 import './App.css'
 import AstroCount from './services/AstroCount';
 import ISSCoordinates from './services/ISSCoordinates';
-import ThreeGlobef from './globe/ThreeGlobef';
+import World from './globe/World';
 
 function App() {
 
   return(
     <>
-      < ThreeGlobef />
-      < ISSCoordinates />
-      < AstroCount />
+      <World />
+      <ISSCoordinates />
+      <AstroCount />
     </>
   )
 }
