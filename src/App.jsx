@@ -1,22 +1,37 @@
-import './App.css'
+import './css/App.css'
 import AstroCount from './services/AstroCount';
 import ISSCoordinates from './services/ISSCoordinates';
 import World from './globe/World';
 import {useState} from 'react'
 
 function App() {
-  const [latitude, setLatitude] = useState(null)
-  const [longitude, setLongitude] = useState(null)
+  
+  const [issData, setIssData] = useState([
+    {
+      lat: 37.7749,
+      lng: 122.4194,
+      alt: 408/6371,
+      radius: 3,
+      color: 'red'
+    }
+])
+
+function handlePositionChange(lng, lat) {
+  setIssData([
+    {
+      lat: lng,
+      lng: lat,
+      alt: 408/6371,
+      radius: 3,
+      color: 'red'
+    }
+  ])
+}
 
   return (
     <>
-      <World lat={latitude} lng={longitude} />
-      <ISSCoordinates
-        latitude={latitude}
-        longitude={longitude}
-        setLatitude={setLatitude}
-        setLongitude={setLongitude}
-      />
+      <ISSCoordinates handlePositionChange={handlePositionChange} issData={issData}/>
+      <World issData={issData} />
       <AstroCount />
     </>
   );
