@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 ISSCoordinates.propTypes = {
   handlePositionChange: PropTypes.func.isRequired,
-  issData: PropTypes.array.isRequired
+  issData: PropTypes.array.isRequired,
+  setIsLoading: PropTypes.func.isRequired
 };
 
 export default function ISSCoordinates(props) {
@@ -15,6 +16,8 @@ export default function ISSCoordinates(props) {
       props.handlePositionChange(data.iss_position.latitude, data.iss_position.longitude)
     } catch (error) {
       console.error('Error fetching ISS position:', error)
+    } finally {
+      props.setIsLoading(false); // Set isLoading to false when the async function is finished
     }
   }
 
