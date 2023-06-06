@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import Globe from 'react-globe.gl';
 import PropTypes from 'prop-types';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
-//import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 World.propTypes = {
   issData: PropTypes.array.isRequired
@@ -12,6 +12,8 @@ World.propTypes = {
 export default function World(props) {
   const globeEl = useRef();
   const tbControlsRef = useRef();
+
+  const [issObj, setIssObj] = useState()
 
   useEffect(() => {
     // Resize globe to fit window
@@ -29,15 +31,8 @@ export default function World(props) {
     window.addEventListener('resize', handleResize);
 
     // Call handleResize initially, maybe optional?
-    handleResize();
+    //handleResize();
 
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
     globeEl.current.pointOfView({ lat: props.issData[0].lat, lng: props.issData[0].lng, altitude: 3.5 });
     const tbControls = new TrackballControls(globeEl.current.camera(), globeEl.current.renderer().domElement);
     tbControlsRef.current = tbControls;
@@ -45,6 +40,29 @@ export default function World(props) {
     tbControls.minDistance = 500;
     tbControls.rotateSpeed = 0.1;
     tbControls.zoomSpeed = 4;
+
+    const loader = new GLTFLoader();
+    loader.load(
+      '../scene.gltf',
+      function (gltf) {
+        // Get the loaded GLTF scene
+        const scene = gltf.scene;
+        scene.scale.set(0.3, 0.3, 0.3); // Adjust the scale factor as needed
+  
+        // Set the modified scene as the value of issObj
+        setIssObj(scene);
+
+      },
+      undefined,
+      function (error) {
+        console.error('Error loading GLTF object:', error);
+      }
+    );
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
@@ -54,14 +72,15 @@ export default function World(props) {
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
         customLayerData={props.issData}
-        customThreeObject={d =>
-          new THREE.Mesh(
-            new THREE.SphereGeometry(d.radius),
-            new THREE.MeshLambertMaterial({ color: d.color })
-          )
-        }
+        customThreeObject={issObj}
         customThreeObjectUpdate={(obj, d) => {
-          Object.assign(obj.position, globeEl.current.getCoords(d.lat, d.lng, d.alt));
+          const position = globeEl.current.getCoords(d.lat, d.lng, d.alt);
+          Object.assign(obj.position, position);
+  
+          // Apply rotation to maintain the object's orientation, directs towards earths center. 
+          obj.lookAt(new THREE.Vector3(0, 0, 0)); 
+          obj.rotateX(Math.PI / 2); // Apply a 90-degree rotation around the y-axis
+          obj.rotateY(Math.PI / 1); // Apply a 180-degree rotation around the y-axis
         }}
       />
     </div>
