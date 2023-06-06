@@ -35,9 +35,12 @@ export default function ISSCoordinates(props) {
   }, [])
 
   return (
+    /*
     <div>
       <p>{props.issData[0].lat}</p>
       <p>{props.issData[0].lng}</p>
     </div>
+    */
+   <></>
   )
 }

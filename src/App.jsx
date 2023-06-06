@@ -4,12 +4,12 @@ import ISSCoordinates from './services/ISSCoordinates';
 import World from './globe/World';
 import { useState } from 'react'
 
-function App() {
+export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [issData, setIssData] = useState([
     {
-      lat: 37.7749,
-      lng: 122.4194,
+      lat: 0,
+      lng: 0,
       alt: 408 / 6371,
       radius: 3,
       color: 'red'
@@ -36,5 +36,3 @@ function App() {
     </>
   );
 }
-
-export default App;
