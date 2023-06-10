@@ -1,4 +1,3 @@
-import './css/App.css'
 import AstroCount from './services/AstroCount';
 import ISSCoordinates from './services/ISSCoordinates';
 import World from './globe/World';
@@ -9,10 +8,7 @@ export default function App() {
   const [issData, setIssData] = useState([
     {
       lat: 0,
-      lng: 0,
-      alt: 408 / 6371,
-      radius: 3,
-      color: 'red'
+      lng: 0
     }
   ]);
 
@@ -20,10 +16,7 @@ export default function App() {
     setIssData([
       {
         lat: lng,
-        lng: lat,
-        alt: 408 / 6371,
-        radius: 3,
-        color: 'red'
+        lng: lat
       }
     ]);
   }
@@ -31,7 +24,7 @@ export default function App() {
   return (
     <>
       <ISSCoordinates handlePositionChange={handlePositionChange} issData={issData} setIsLoading={setIsLoading} />
-      {!isLoading && <World issData={issData} />} {/* Render World component only when isLoading is false */}
+      {!isLoading && <World issData={issData} />}
       <AstroCount />
     </>
   );

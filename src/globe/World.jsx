@@ -13,10 +13,11 @@ export default function World(props) {
   const globeEl = useRef();
   const tbControlsRef = useRef();
 
-  const [issObj, setIssObj] = useState()
+  // need to use state so component is rerendered when finished loading object
+  const [issObj, setIssObj] = useState();
 
   useEffect(() => {
-    // Resize globe to fit window
+    // Resizes globe to fit window
     const handleResize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
@@ -27,13 +28,13 @@ export default function World(props) {
       globeEl.current.camera().updateProjectionMatrix();
     };
 
-    // Add event listener for window resize
+    // Adds event listener for window resize
     window.addEventListener('resize', handleResize);
 
-    // Call handleResize initially, maybe optional?
+    // Calls handleResize initially, maybe optional?
     //handleResize();
 
-    globeEl.current.pointOfView({ lat: props.issData[0].lat, lng: props.issData[0].lng, altitude: 3.5 });
+    globeEl.current.pointOfView({ lat: props.issData[0].lat, lng: props.issData[0].lng, altitude: 2.5 });
     const tbControls = new TrackballControls(globeEl.current.camera(), globeEl.current.renderer().domElement);
     tbControlsRef.current = tbControls;
 
@@ -45,11 +46,11 @@ export default function World(props) {
     loader.load(
       '../scene.gltf',
       function (gltf) {
-        // Get the loaded GLTF scene
+        // Gets the loaded GLTF scene
         const scene = gltf.scene;
-        scene.scale.set(0.3, 0.3, 0.3); // Adjust the scale factor as needed
+        scene.scale.set(0.2, 0.2, 0.2); // Adjusts the scale factor
   
-        // Set the modified scene as the value of issObj
+        // Sets the modified scene as the value of issObj
         setIssObj(scene);
 
       },
@@ -74,13 +75,13 @@ export default function World(props) {
         customLayerData={props.issData}
         customThreeObject={issObj}
         customThreeObjectUpdate={(obj, d) => {
-          const position = globeEl.current.getCoords(d.lat, d.lng, d.alt);
+          const position = globeEl.current.getCoords(d.lat, d.lng, 408 / 6371); //sets coordinates and sets altitude of ISS to 408km
           Object.assign(obj.position, position);
   
-          // Apply rotation to maintain the object's orientation, directs towards earths center. 
+          // Applies rotation to maintain the object's orientation, directs towards earths center. 
           obj.lookAt(new THREE.Vector3(0, 0, 0)); 
-          obj.rotateX(Math.PI / 2); // Apply a 90-degree rotation around the y-axis
-          obj.rotateY(Math.PI / 1); // Apply a 180-degree rotation around the y-axis
+          obj.rotateX(Math.PI / 2); // Applies a 90-degree rotation around the x-axis
+          obj.rotateY(Math.PI / 1); // Applies a 180-degree rotation around the y-axis
         }}
       />
     </div>
