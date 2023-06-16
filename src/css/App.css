@@ -1,18 +1,46 @@
 
 
-/*
+
 .globe-container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
-*/
 
 .globe-container{
   height: 100vh;
 }
 
+.coordinates{
+  z-index: 2;
+  position: relative;
+  color: white;
+  display: flex;
+  justify-content:center;
+  padding-top: 3rem;
+}
+
+.coordinates p{
+  padding-left: 7rem;
+  padding-right: 7rem;
+}
+
+.astro-data{
+  z-index: 2;
+  position: relative;
+  left: 90rem;
+  top: 10rem;
+  color: white;
+}
+.astro-data p{
+  padding-bottom: .5rem;
+
+}
+
+.astro-data ul{
+  padding-left: 1rem;
+}
 
 
 *{
@@ -23,5 +51,6 @@
 
 body,
 html {
+  height: 100%;
   overflow: hidden;
 }

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import Globe from 'react-globe.gl';
 import PropTypes from 'prop-types';
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 World.propTypes = {
@@ -11,7 +10,6 @@ World.propTypes = {
 
 export default function World(props) {
   const globeEl = useRef();
-  const tbControlsRef = useRef();
 
   // need to use state so component is rerendered when finished loading object
   const [issObj, setIssObj] = useState();
@@ -31,24 +29,18 @@ export default function World(props) {
     // Adds event listener for window resize
     window.addEventListener('resize', handleResize);
 
-    // Calls handleResize initially, maybe optional?
-    //handleResize();
 
-    globeEl.current.pointOfView({ lat: props.issData[0].lat, lng: props.issData[0].lng, altitude: 2.5 });
-    const tbControls = new TrackballControls(globeEl.current.camera(), globeEl.current.renderer().domElement);
-    tbControlsRef.current = tbControls;
-
-    tbControls.minDistance = 500;
-    tbControls.rotateSpeed = 0.1;
-    tbControls.zoomSpeed = 4;
-
+    globeEl.current.pointOfView({ lat: props.issData[0].lat, lng: props.issData[0].lng, altitude: 2 });
+    const orbitControls = globeEl.current.controls()
+    orbitControls.enableZoom = false;
+    
     const loader = new GLTFLoader();
     loader.load(
       '../scene.gltf',
       function (gltf) {
         // Gets the loaded GLTF scene
         const scene = gltf.scene;
-        scene.scale.set(0.2, 0.2, 0.2); // Adjusts the scale factor
+        scene.scale.set(0.3, 0.3, 0.3); // Adjusts the scale factor
   
         // Sets the modified scene as the value of issObj
         setIssObj(scene);

@@ -29,10 +29,8 @@ export default function AstroCount() {
   }, []);
 
   return (
-    <></>
-    /*
-    <div>
-      <p>Number of astronauts: {number}</p>
+    <div className="astro-data">
+      <p>People in space: {number}</p>
       <ul>
         {astronauts.map((astronaut, index) => (
           <li key={index}>
@@ -41,7 +39,6 @@ export default function AstroCount() {
         ))}
       </ul>
     </div>
-    */
   )
 }
 
