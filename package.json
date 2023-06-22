@@ -16,6 +16,7 @@
     "react-dom": "^18.2.0",
     "react-globe.gl": "^2.24.1",
     "satellite.js": "^5.0.0",
+    "serve-file-download": "^0.0.1",
     "style-loader": "^3.3.3",
     "three": "^0.152.2",
     "three-globe": "^2.27.2"

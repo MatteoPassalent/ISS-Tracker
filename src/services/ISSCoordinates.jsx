@@ -37,8 +37,8 @@ export default function ISSCoordinates(props) {
   return (
     
     <div className="coordinates">
-      <p>Latitude: {props.issData[0].lat}</p>
-      <p>Longitude: {props.issData[0].lng}</p>
+      <h2>Latitude: {parseFloat(props.issData[0].lat).toFixed(2)}</h2>
+      <h2>Longitude: {parseFloat(props.issData[0].lng).toFixed(2)}</h2>
     </div>
     
   )

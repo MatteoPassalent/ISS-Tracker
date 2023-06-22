@@ -24,8 +24,8 @@ export default function App() {
   return (
     <>
       <ISSCoordinates handlePositionChange={handlePositionChange} issData={issData} setIsLoading={setIsLoading} />
-      {!isLoading && <World issData={issData} />}
       <AstroCount />
+      {!isLoading && <World issData={issData} />}
     </>
   );
 }
