@@ -65,6 +65,12 @@ export default function World(props) {
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
         customLayerData={props.issData}
+        customLayerLabel={obj => {
+          return `<div><b>International Space Station</b></div>
+                  <div>Latitude: ${parseFloat(obj.lat).toFixed(2)}</div> 
+                  <div>Latitude: ${parseFloat(obj.lng).toFixed(2)}</div>`;
+        }}
+        onCustomLayerClick={() => window.open('https://www.nasa.gov/mission_pages/station/main/index.html', '_blank')}
         customThreeObject={issObj}
         customThreeObjectUpdate={(obj, d) => {
           const position = globeEl.current.getCoords(d.lat, d.lng, 408 / 6371); //sets coordinates and sets altitude of ISS to 408km
@@ -74,6 +80,7 @@ export default function World(props) {
           obj.lookAt(new THREE.Vector3(0, 0, 0)); 
           obj.rotateX(Math.PI / 2); // Applies a 90-degree rotation around the x-axis
           obj.rotateY(Math.PI / 1); // Applies a 180-degree rotation around the y-axis
+          
         }}
       />
     </div>
